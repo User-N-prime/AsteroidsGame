@@ -1,4 +1,5 @@
 Spaceship bob;
+ArrayList<Asteroid> mark = new ArrayList<Asteroid>();
 boolean accel = false;
 Star[] sue = new Star[200];
 
@@ -8,35 +9,33 @@ public void setup() {
   bob = new Spaceship();
   for (int i = 0; i < sue.length; i++)
     sue[i] = new Star();
+  for (int i = 0; i < 20; i++)
+    mark.add(new Asteroid());
 }
 
 public void draw() {
   background(0);
   bob.show();
   bob.move();
+  for (int i = 0; i < mark.size(); i++) {
+    mark.get(i).show();
+    mark.get(i).move();
+  }
+  for (int i = 0; i < mark.size(); i++) {
+    if (dist((float)bob.getCenterX(), (float)bob.getCenterY(), (float)mark.get(i).getCenterX(), (float)mark.get(i).getCenterY()) < 25) {
+      mark.remove(i);
+    }
+  }
+  
   if (accel)
     bob.accelerate(0.1);
   if (!accel) {
-    if (bob.getXspeed() > 0.1) {
-      bob.setXspeed(bob.getXspeed() - 0.1);
-      if (bob.getXspeed() <= 0.1)
-        bob.setXspeed(0);
-    }
-    if (bob.getXspeed() < -0.1) {
-      bob.setXspeed(bob.getXspeed() + 0.1);
-      if (bob.getXspeed() >= -0.1)
-        bob.setXspeed(0);
-    }
-    if (bob.getYspeed() > 0.1) {
-      bob.setYspeed(bob.getYspeed() - 0.1);
-      if (bob.getYspeed() <= 0.1)
-        bob.setYspeed(0);
-    }
-    if (bob.getYspeed() < -0.1) {
-      bob.setYspeed(bob.getYspeed() + 0.1);
-      if (bob.getYspeed() >= -0.1)
-        bob.setYspeed(0);
-    }
+    bob.setXspeed(bob.getXspeed() / 1.05);
+    if (abs((float)bob.getXspeed()) <= 0.1)
+      bob.setXspeed(0);
+    bob.setYspeed(bob.getYspeed() / 1.05);
+    if (abs((float)bob.getYspeed()) <= 0.1)
+      bob.setYspeed(0);
   }
    
   for (int i = 0; i < sue.length; i++)

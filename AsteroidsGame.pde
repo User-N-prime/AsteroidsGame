@@ -1,6 +1,10 @@
 Spaceship bob;
 ArrayList<Asteroid> mark = new ArrayList<Asteroid>();
+ArrayList<Bullet> bub = new ArrayList<>();
 boolean accel = false;
+boolean decel = false;
+boolean left = false;
+boolean right = false;
 Star[] sue = new Star[200];
 
 
@@ -15,12 +19,10 @@ public void setup() {
 
 public void draw() {
   background(0);
-  
+ 
   for (int i = 0; i < sue.length; i++)
     sue[i].show();
-  
-  bob.show();
-  bob.move();
+
   for (int i = 0; i < mark.size(); i++) {
     mark.get(i).show();
     mark.get(i).move();
@@ -31,9 +33,14 @@ public void draw() {
     }
   }
   
+  if (mark.size() != 20)
+    mark.add(new Asteroid());
+ 
   if (accel)
-    bob.accelerate(0.1);
-  if (!accel) {
+    bob.accelerate(0.2);
+  else if (decel)
+    bob.accelerate(-0.2);
+  else {  
     bob.setXspeed(bob.getXspeed() / 1.05);
     if (abs((float)bob.getXspeed()) <= 0.1)
       bob.setXspeed(0);
@@ -41,20 +48,55 @@ public void draw() {
     if (abs((float)bob.getYspeed()) <= 0.1)
       bob.setYspeed(0);
   }
+  
+   if (left)
+     bob.turn(5);
+   if (right)
+     bob.turn(-5);
+  
+ 
+  for (int i = bub.size() - 1; i >= 0; i--) {
+    bub.get(i).show();
+    bub.get(i).move();
+    if (bub.get(i).getColor() < 30) {
+      bub.remove(i);
+      break;
+    }
+    for (int j = mark.size() - 1; j >= 0; j--) {
+      if (dist((float)bub.get(i).getCenterX(), (float)bub.get(i).getCenterY(), (float)mark.get(j).getCenterX(), (float)mark.get(j).getCenterY()) < 25) {
+        bub.remove(i);
+        mark.remove(j);
+        break;
+      }
+    }
+  }
+  
+  bob.show();
+  bob.move();
 }
 
 public void keyPressed() {
-  if (key == ' ')
+  if (key == 'w')
     accel = true;
-  if (keyCode == LEFT)
-    bob.turn(5);
-  if (keyCode == RIGHT)
-    bob.turn(-5);
+  if (key == 'a')
+    left = true;
+  if (key == 's')
+    decel = true;
+  if (key == 'd')
+    right = true;
   if (key == 'p')
     bob.hyperSpeed();
+  if (key == ' ')
+    bub.add(new Bullet(bob));
 }
 
 public void keyReleased() {
-  if (key == ' ')
+  if (key == 'w')
     accel = false;
+  if (key == 'a')
+    left = false;
+  if (key == 's')
+    decel = false;
+  if (key == 'd')
+    right = false;
 }

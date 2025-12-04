@@ -1,6 +1,6 @@
 Spaceship bob;
 ArrayList<Asteroid> mark = new ArrayList<Asteroid>();
-ArrayList<Bullet> bub = new ArrayList<>();
+ArrayList<Bullet> bub = new ArrayList<Bullet>();
 boolean accel = false;
 boolean decel = false;
 boolean left = false;

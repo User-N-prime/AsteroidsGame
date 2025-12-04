@@ -58,6 +58,7 @@ public void draw() {
   for (int i = bub.size() - 1; i >= 0; i--) {
     bub.get(i).show();
     bub.get(i).move();
+    // bullets fade, then removed
     if (bub.get(i).getColor() < 30) {
       bub.remove(i);
       break;
